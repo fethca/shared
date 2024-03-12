@@ -11,7 +11,7 @@ yarn add @fethcat/shared
 Use services:
 
 ```typescript
-import { extractPackage } from '@fethcat/shared'
+import { extractPackageJson } from '@fethcat/shared'
 
-await extractPackage()
+await extractPackageJson()
 ```
