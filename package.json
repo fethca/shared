@@ -1,0 +1,35 @@
+{
+  "name": "@fethcat/shared",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "license": "ISC",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "eslint \"{src,tests}/**/*.ts\"",
+    "format": "prettier -w \"{src,tests}/**/*.ts\"",
+    "version:patch": "version patch",
+    "version:minor": "version minor",
+    "version:major": "version major"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:fethca/shared.git"
+  },
+  "devDependencies": {
+    "@fethcat/prettier-config": "^1.0.2",
+    "@fethcat/tests": "^0.0.5",
+    "@types/node": "^20.11.25",
+    "prettier": "^2.8.1",
+    "typescript": "^5.3.3"
+  },
+  "prettier": "@fethcat/prettier-config",
+  "dependencies": {
+    "zod": "^3.22.4"
+  }
+}
