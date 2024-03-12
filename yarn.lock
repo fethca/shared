@@ -167,6 +167,13 @@
     "@vitest/coverage-v8" "^1.3.1"
     vitest "^1.3.1"
 
+"@fethcat/version@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.npmjs.org/@fethcat/version/-/version-0.0.7.tgz#7b5719628226f5e34d2b67298fc202c9cd1b34a3"
+  integrity sha512-z7f1nGPREjLpOFBAD7VIDAc8qRMscAmaE6S629NAF8xEXxfmdApCWvNv17VfmAZuw0V65XiAuqJl/Vw9JZfn3Q==
+  dependencies:
+    async-exec "^1.1.0"
+
 "@istanbuljs/schema@^0.1.2":
   version "0.1.3"
   resolved "https://registry.npmjs.org/@istanbuljs/schema/-/schema-0.1.3.tgz#e45e384e4b8ec16bce2fd903af78450f6bf7ec98"
@@ -380,6 +387,11 @@ assertion-error@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/assertion-error/-/assertion-error-1.1.0.tgz#e60b6b0e8f301bd97e5375215bda406c85118c0b"
   integrity sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==
+
+async-exec@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/async-exec/-/async-exec-1.1.0.tgz#f7021613678fa5827edf0b42e600f27af1b8c1f0"
+  integrity sha512-6EoIzK7POGxExlZ7lHDlY17RbmyH5Djip6yRXFuPhW5F8dKhjF+xLK31E8t5y9z+WC8LZNvVVnY2XNloBcTDHQ==
 
 balanced-match@^1.0.0:
   version "1.0.2"
