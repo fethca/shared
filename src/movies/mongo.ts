@@ -110,8 +110,8 @@ export const MovieDBSchema = new Schema(
   { timestamps: true },
 )
 
-MovieDBSchema.pre('findOne', async function (next) {
-  await this.populate('senscritique.actors senscritique.directors senscritique.polls')
+MovieDBSchema.pre('findOne', function (next) {
+  void this.populate('senscritique.actors senscritique.directors senscritique.polls')
   next()
 })
 
