@@ -1,7 +1,7 @@
 {
   "include": ["src", "tests", "vitest.config.ts"],
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "./dist",
     "module": "nodenext",
     "strict": true,
     "types": ["vitest/globals"]

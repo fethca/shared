@@ -9,17 +9,17 @@ describe('extractPackageJson', () => {
     vi.mocked(readFileSync).mockReturnValue(JSON.stringify({ version: '1.0.0', name: 'my-app' }))
   })
 
-  it('should return package.json parsed with required values', async () => {
-    const result = await extractPackageJson()
+  it('should return package.json parsed with required values', () => {
+    const result = extractPackageJson()
     expect(result).toEqual({
       name: 'my-app',
       version: '1.0.0',
     })
   })
 
-  it('should return package.json parsed with non required values', async () => {
+  it('should return package.json parsed with non required values', () => {
     vi.mocked(readFileSync).mockReturnValue(JSON.stringify({ version: '1.0.0', name: 'my-app', titi: 'toto' }))
-    const result = await extractPackageJson()
+    const result = extractPackageJson()
     expect(result).toEqual({
       name: 'my-app',
       version: '1.0.0',
@@ -27,7 +27,7 @@ describe('extractPackageJson', () => {
     })
   })
 
-  it('should throw if a value is missing', async () => {
+  it('should throw if a value is missing', () => {
     vi.mocked(readFileSync).mockReturnValue(JSON.stringify({ version: '1.0.0' }))
     const error = new ZodError([
       {

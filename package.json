@@ -1,6 +1,6 @@
 {
   "name": "@fethcat/shared",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -11,8 +11,9 @@
   "license": "ISC",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "lint": "eslint \"{src,tests}/**/*.ts\"",
     "format": "prettier -w \"{src,tests}/**/*.ts\"",
+    "lint": "eslint \"{src,tests}/**/*.ts\"",
+    "test": "vitest run --coverage",
     "version:patch": "version patch",
     "version:minor": "version minor",
     "version:major": "version major"
@@ -22,15 +23,31 @@
     "url": "git@github.com:fethca/shared.git"
   },
   "devDependencies": {
-    "@fethcat/prettier-config": "^1.0.2",
-    "@fethcat/tests": "^0.0.5",
-    "@fethcat/version": "^0.0.7",
-    "@types/node": "^20.11.25",
-    "prettier": "^2.8.1",
-    "typescript": "^5.3.3"
+    "@fethcat/eslint-plugin": "^0.0.3",
+    "@fethcat/prettier-config": "^1.0.5",
+    "@fethcat/tests": "^0.0.15",
+    "@fethcat/version": "^0.0.11",
+    "@types/lodash.get": "^4.4.9",
+    "@types/luxon": "^3.4.2",
+    "@types/node": "^20.12.12",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  },
+  "dependencies": {
+    "@fethcat/validator": "^0.0.5",
+    "@vitest/coverage-v8": "^1.6.0",
+    "envalid": "^8.0.0",
+    "fuse.js": "^7.0.0",
+    "lodash.get": "^4.4.2",
+    "luxon": "^3.4.4",
+    "mongoose": "^8.3.5",
+    "zod": "^3.23.8"
   },
   "prettier": "@fethcat/prettier-config",
-  "dependencies": {
-    "zod": "^3.22.4"
+  "eslintConfig": {
+    "extends": [
+      "plugin:@fethcat/back"
+    ]
   }
 }
