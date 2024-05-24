@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
-import { IPackageJson, packageJsonSchema } from './models.js'
+import { IPackageJson, packageJsonSchema } from './zod.js'
 
 export function extractPackageJson(): IPackageJson {
   const path = resolve(process.cwd(), 'package.json')
