@@ -172,7 +172,7 @@ const filter = (ids: number[]) => {
 }
 
 const mapIds = (values: Document[]) => {
-  const result: Record<string, string> = {}
+  const result: Record<string, unknown> = {}
   values.forEach((value) => (result[`${value.id}`] = value._id))
   return result
 }
