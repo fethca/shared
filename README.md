@@ -5,7 +5,7 @@
 Install package:
 
 ```bash
-yarn add @fethcat/shared
+pnpm add @fethcat/shared
 ```
 
 Use services:
