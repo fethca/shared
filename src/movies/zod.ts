@@ -10,13 +10,11 @@ export const actorSchemaFormat = z
       id: z.number(),
     }),
   })
-  .transform(({ name, role, contact }) => ({ name, role, picture: contact.picture, id: contact.id }))
+  .transform(({ name, role, contact }) => ({ actor: { name, picture: contact.picture, id: contact.id }, role }))
 
 export const actorSchema = z.object({
-  name: z.string(),
+  actor: z.object({ name: z.string(), picture: z.string(), id: z.number() }),
   role: z.string().optional().nullable(),
-  picture: z.string(),
-  id: z.number(),
 })
 
 export const directorSchemaFormat = z
@@ -133,13 +131,13 @@ export const movieSchema = z.object({
       directors: z.array(directorSchema),
       genresInfos: z.array(z.string()),
       polls: z.array(pollSchema).nullable(),
-      videos: z.array(videoSchema).nullable(),
+      videos: z.array(videoSchema).nullable().optional(),
       popularity: z.number(),
     }),
   ),
-  tmdb: tmbdbSchema,
+  tmdb: tmbdbSchema.optional(),
   providers: z.record(z.string(), z.unknown()).default({}),
-  search: z.string(),
+  search: z.string().default(''),
   popularity: z.number().default(0),
   released: z.boolean().default(false),
   id: z.number(),
@@ -148,8 +146,9 @@ export const movieSchema = z.object({
     .object({
       lastJobDate: z.number(),
       lastUpdateDate: z.number(),
+      unfound: z.boolean().default(false),
     })
-    .default({ lastJobDate: DateTime.now().toMillis(), lastUpdateDate: DateTime.now().toMillis() }),
+    .default({ lastJobDate: DateTime.now().toMillis(), lastUpdateDate: DateTime.now().toMillis(), unfound: false }),
 })
 
 export type IActor = z.infer<typeof actorSchema>
