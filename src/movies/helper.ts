@@ -29,5 +29,7 @@ export async function getMax(Model: Model<IMovie>, property: maxKeys, filter?: F
   const [movie] = await Model.find(filter || {})
     .sort({ [property]: -1 })
     .limit(1)
-  return get(movie, property)
+  const max = get(movie, property)
+  if (!max) throw new Error('No max for this key')
+  return max
 }
