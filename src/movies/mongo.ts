@@ -5,7 +5,6 @@ export const ActorDBSchema = new Schema({
   id: { type: Number, index: true },
   name: { type: String },
   picture: { type: String },
-  role: { type: String },
 })
 
 export const Actor = mongoose.model<IActor>('actor', ActorDBSchema)
@@ -31,7 +30,7 @@ export const MovieDBSchema = new Schema(
   {
     id: { type: Number, index: true, unique: true },
     senscritique: {
-      actors: [{ type: Schema.Types.ObjectId, ref: 'actor', index: true }],
+      actors: [{ actor: { type: Schema.Types.ObjectId, ref: 'actor', index: true }, role: { type: String } }],
       category: { type: String },
       countries: [{ type: String, index: true }],
       dateRelease: { type: String, index: true },
@@ -105,13 +104,14 @@ export const MovieDBSchema = new Schema(
     opsDatas: {
       lastJobDate: { type: Number },
       lastUpdateDate: { type: Number },
+      unfound: { type: Boolean },
     },
   },
   { timestamps: true },
 )
 
 MovieDBSchema.pre('findOne', function (next) {
-  void this.populate('senscritique.actors senscritique.directors senscritique.polls')
+  void this.populate('senscritique.actors.actor senscritique.directors senscritique.polls')
   next()
 })
 
@@ -123,7 +123,7 @@ MovieDBSchema.pre('findOneAndUpdate', async function (next) {
     if (!success) return next()
     const { actors, directors, polls, ...senscritique } = movie.senscritique
 
-    const upsertActors = actors.map((actor) => formatUpsert(actor))
+    const upsertActors = actors.map(({ actor }) => formatUpsert(actor))
     const upsertDirectors = directors.map((director) => formatUpsert(director))
     const upsertPolls = polls?.map((poll) => formatUpsert(poll)) || []
 
@@ -131,7 +131,7 @@ MovieDBSchema.pre('findOneAndUpdate', async function (next) {
 
     await Promise.all(upserts)
 
-    const actorsIds = actors.map((actor) => actor.id)
+    const actorsIds = actors.map(({ actor }) => actor.id)
     const directorsIds = directors.map((director) => director.id)
     const pollsIds = polls?.map((poll) => poll.id) || []
 
@@ -139,7 +139,7 @@ MovieDBSchema.pre('findOneAndUpdate', async function (next) {
 
     const [actorsDocs, directorsDocs, pollsDocs] = await Promise.all(ids)
 
-    const actorsOIds = actors.map((actor) => mapIds(actorsDocs)[actor.id])
+    const actorsOIds = actors.map(({ actor, role }) => ({ actor: mapIds(actorsDocs)[actor.id], role }))
     const directorsOIds = directors.map((director) => mapIds(directorsDocs)[director.id])
     const pollsOIds = polls?.map((poll) => mapIds(pollsDocs)[poll.id]) || []
 
