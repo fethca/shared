@@ -1,13 +1,16 @@
 {
   "name": "@fethcat/shared",
   "version": "0.0.9",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "type": "module",
   "files": [
     "dist",
     "package.json"
   ],
+  "exports": {
+    "./types": "./dist/index.types.js",
+    "./mongo": "./dist/index.mongo.js",
+    "./helper": "./dist/index.helper.js"
+  },
   "license": "ISC",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
