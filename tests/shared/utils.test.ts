@@ -1,4 +1,4 @@
-import { rate } from '../../src/index.js'
+import { rate } from '../../src/index.helpers.js'
 
 describe('rate', () => {
   it('should return 1 if no string', () => {

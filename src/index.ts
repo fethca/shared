@@ -1,7 +1,0 @@
-export * from './movies/helper.js'
-export * from './movies/mongo.js'
-export * from './movies/zod.js'
-export * from './package/helper.js'
-export * from './package/zod.js'
-export * from './shared/utils.js'
-export * from './shared/zod.js'

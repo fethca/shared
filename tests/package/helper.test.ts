@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs'
 import { ZodError } from 'zod'
-import { extractPackageJson } from '../../src/index.js'
+import { extractPackageJson } from '../../src/index.helpers.js'
 
 vi.mock('fs')
 

@@ -1,4 +1,4 @@
-import { formatNgrams, slugTitle } from '../../src/index.js'
+import { formatNgrams, slugTitle } from '../../src/index.helpers.js'
 
 describe('formatNgrams', () => {
   it('should return empty array if no string', () => {
