@@ -9,7 +9,7 @@
   "exports": {
     "./types": "./dist/index.types.js",
     "./mongo": "./dist/index.mongo.js",
-    "./helper": "./dist/index.helper.js"
+    "./helpers": "./dist/index.helpers.js"
   },
   "license": "ISC",
   "scripts": {
@@ -29,7 +29,7 @@
     "@fethcat/eslint-plugin": "^0.0.3",
     "@fethcat/prettier-config": "^1.0.5",
     "@fethcat/tests": "^0.0.15",
-    "@fethcat/version": "^0.0.11",
+    "@fethcat/version": "^0.0.12",
     "@types/lodash.get": "^4.4.9",
     "@types/luxon": "^3.4.2",
     "@types/node": "^20.12.12",
