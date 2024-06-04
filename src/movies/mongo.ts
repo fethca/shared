@@ -98,7 +98,14 @@ export const MovieDBSchema = new Schema(
       searchQuery: { type: Number },
     },
     search: { type: String },
-    providers: { type: Schema.Types.Mixed },
+    providers: [
+      {
+        name: { type: String },
+        url: { type: String },
+        provider: { type: String, index: true },
+        id: { type: String, index: true },
+      },
+    ],
     popularity: { type: Number, index: true },
     released: { type: Boolean, index: true },
     opsDatas: {
@@ -107,10 +114,10 @@ export const MovieDBSchema = new Schema(
       unfound: { type: Boolean },
     },
   },
-  { timestamps: true },
+  { timestamps: true, strict: false },
 )
 
-MovieDBSchema.pre('findOne', function (next) {
+MovieDBSchema.pre(['findOne', 'find'], function (next) {
   void this.populate('senscritique.actors.actor senscritique.directors senscritique.polls')
   next()
 })
@@ -119,8 +126,7 @@ MovieDBSchema.pre('findOneAndUpdate', async function (next) {
   try {
     const document = this.getUpdate()
 
-    const { data: movie, success } = movieSchema.safeParse(document)
-    if (!success) return next()
+    const movie = movieSchema.parse(document)
     const { actors, directors, polls, ...senscritique } = movie.senscritique
 
     const upsertActors = actors.map(({ actor }) => formatUpsert(actor))

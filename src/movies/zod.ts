@@ -13,7 +13,7 @@ export const actorSchemaFormat = z
   .transform(({ name, role, contact }) => ({ actor: { name, picture: contact.picture, id: contact.id }, role }))
 
 export const actorSchema = z.object({
-  actor: z.object({ name: z.string(), picture: z.string(), id: z.number() }),
+  actor: z.object({ name: z.string(), picture: z.string(), id: z.number(), _id: z.string().default('') }),
   role: z.string().optional().nullable(),
 })
 
@@ -28,6 +28,7 @@ export const directorSchemaFormat = z
   .transform(({ name, contact }) => ({ name, picture: contact.picture, id: contact.id }))
 
 export const directorSchema = z.object({
+  _id: z.string().default(''),
   name: z.string(),
   picture: z.string(),
   id: z.number(),
@@ -46,14 +47,15 @@ export const pollSchemaFormat = z
   .transform(({ poll }) => ({
     id: poll.id,
     cover: poll.cover,
-    label: poll.label,
+    name: poll.label,
     participationCount: poll.participationCount,
   }))
 
 export const pollSchema = z.object({
+  _id: z.string().default(''),
   id: z.number(),
   cover: z.string(),
-  label: z.string(),
+  name: z.string(),
   participationCount: z.number(),
 })
 
@@ -123,6 +125,10 @@ export const tmbdbSchema = tmdbSchemaFormat.merge(z.object({ images: z.array(z.s
 
 export type ITmdb = z.infer<typeof tmbdbSchema>
 
+export const providerSchema = z.object({ id: z.string(), name: z.string(), url: z.string().optional() }).passthrough()
+
+export type IProviders = z.infer<typeof providerSchema>
+
 export const movieSchema = z.object({
   senscritique: scMovieSchema.omit({ medias: true }).merge(
     z.object({
@@ -136,7 +142,7 @@ export const movieSchema = z.object({
     }),
   ),
   tmdb: tmbdbSchema.optional(),
-  providers: z.record(z.string(), z.unknown()).default({}),
+  providers: z.array(providerSchema).default([]),
   search: z.string().default(''),
   popularity: z.number().default(0),
   released: z.boolean().default(false),
