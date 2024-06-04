@@ -23,12 +23,19 @@ export function slugTitle(title: string) {
   return title.replace(/[^a-zA-Z]/g, '').toLocaleLowerCase()
 }
 
-type maxKeys = 'tmdb.popularity' | 'senscritique.stats.ratingCount' | 'senscritique.stats.wishCount'
-
-export async function getMax(Model: Model<IMovie>, property: maxKeys, filter?: FilterQuery<IMovie>) {
+export async function getMax(Model: Model<IMovie>, property: string, filter?: FilterQuery<IMovie>): Promise<number> {
   const [movie] = await Model.find(filter || {})
     .sort({ [property]: -1 })
     .limit(1)
+
+  const keys = property.split('.')
+  const key = keys.pop()
+  const path = keys.join()
+  const parent = get(movie, path)
+  if (parent && Array.isArray(parent) && key) {
+    const maxes = parent.map((value) => get(value, key)).sort((a, b) => a - b)
+    return maxes.pop()
+  }
   const max = get(movie, property)
   if (!max) throw new Error('No max for this key')
   return max
