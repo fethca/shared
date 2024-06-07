@@ -5,17 +5,27 @@ export const actorSchemaFormat = z
   .object({
     name: z.string(),
     role: z.string().optional().nullable(),
-    contact: z.object({
-      picture: z.string(),
-      id: z.number(),
-    }),
+    contact: z
+      .object({
+        picture: z.string(),
+        id: z.number(),
+      })
+      .nullable(),
   })
-  .transform(({ name, role, contact }) => ({ actor: { name, picture: contact.picture, id: contact.id }, role }))
+  .transform(({ name, role, contact }) =>
+    contact ? { actor: { name, picture: contact.picture, id: contact.id }, role } : null,
+  )
 
 export const actorSchema = z.object({
-  actor: z.object({ name: z.string(), picture: z.string(), id: z.number(), _id: z.string().default('') }),
+  actor: z.object({ name: z.string(), picture: z.string(), id: z.number() }),
   role: z.string().optional().nullable(),
 })
+
+export const actorsSchema = z
+  .array(actorSchemaFormat)
+  .transform((actors) => actors.filter((actor) => actor !== null))
+  .nullable()
+  .transform((value) => value || [])
 
 export const directorSchemaFormat = z
   .object({
@@ -28,11 +38,15 @@ export const directorSchemaFormat = z
   .transform(({ name, contact }) => ({ name, picture: contact.picture, id: contact.id }))
 
 export const directorSchema = z.object({
-  _id: z.string().default(''),
   name: z.string(),
   picture: z.string(),
   id: z.number(),
 })
+
+export const directorsSchema = z
+  .array(directorSchemaFormat)
+  .nullable()
+  .transform((value) => value || [])
 
 export const picturesSchema = z.object({
   backdrops: z.array(z.string()),
@@ -52,12 +66,16 @@ export const pollSchemaFormat = z
   }))
 
 export const pollSchema = z.object({
-  _id: z.string().default(''),
   id: z.number(),
-  cover: z.string(),
+  cover: z.string().nullable(),
   name: z.string(),
   participationCount: z.number(),
 })
+
+export const pollsSchema = z
+  .array(pollSchemaFormat)
+  .nullable()
+  .transform((value) => value || [])
 
 export const statSchema = z.object({
   ratingCount: z.number(),
@@ -73,13 +91,18 @@ export const videoSchema = z.object({
   id: z.string(),
 })
 
+export const categorySchema = z
+  .string()
+  .nullable()
+  .transform((value) => value || 'Film')
+
 export const scMovieSchema = z.object({
-  actors: z.array(actorSchemaFormat),
-  category: z.string(),
+  actors: actorsSchema,
+  category: categorySchema,
   countries: z.array(z.object({ name: z.string() }).transform((val) => val.name)),
   dateRelease: z.string().nullable(),
   dateReleaseOriginal: z.string().nullable(),
-  directors: z.array(directorSchemaFormat),
+  directors: directorsSchema,
   duration: z.number().nullable(),
   frenchReleaseDate: z.string().nullable(),
   genresInfos: z.array(z.object({ label: z.string() }).transform((val) => val.label)),
@@ -87,7 +110,7 @@ export const scMovieSchema = z.object({
   medias: z.object({ videos: z.array(videoSchema).nullable() }),
   originalTitle: z.string().nullable(),
   pictures: picturesSchema,
-  polls: z.array(pollSchemaFormat).nullable(),
+  polls: pollsSchema,
   rating: z.number().nullable(),
   slug: z.string(),
   stats: statSchema,
@@ -129,18 +152,20 @@ export const providerSchema = z.object({ id: z.string(), name: z.string(), url: 
 
 export type IProviders = z.infer<typeof providerSchema>
 
+export const senscritiqueSchema = scMovieSchema.omit({ medias: true }).merge(
+  z.object({
+    actors: z.array(actorSchema),
+    countries: z.array(z.string()),
+    directors: z.array(directorSchema),
+    genresInfos: z.array(z.string()),
+    polls: z.array(pollSchema),
+    videos: z.array(videoSchema).nullable().optional(),
+    popularity: z.number(),
+  }),
+)
+
 export const movieSchema = z.object({
-  senscritique: scMovieSchema.omit({ medias: true }).merge(
-    z.object({
-      actors: z.array(actorSchema),
-      countries: z.array(z.string()),
-      directors: z.array(directorSchema),
-      genresInfos: z.array(z.string()),
-      polls: z.array(pollSchema).nullable(),
-      videos: z.array(videoSchema).nullable().optional(),
-      popularity: z.number(),
-    }),
-  ),
+  senscritique: senscritiqueSchema,
   tmdb: tmbdbSchema.optional(),
   providers: z.array(providerSchema).default([]),
   search: z.string().default(''),
