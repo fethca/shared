@@ -1,8 +1,8 @@
-import mongoose, { Document, MongooseError, QueryOptions, Schema } from 'mongoose'
+import mongoose, { MongooseError, QueryOptions, Schema } from 'mongoose'
 import { IActor, IDirector, IMovie, IPoll, movieSchema } from './zod.js'
 
 export const ActorDBSchema = new Schema({
-  id: { type: Number, index: true },
+  id: { type: Number, index: true, unique: true },
   name: { type: String },
   picture: { type: String },
 })
@@ -10,7 +10,7 @@ export const ActorDBSchema = new Schema({
 export const Actor = mongoose.model<IActor>('actor', ActorDBSchema)
 
 export const DirectorDBSchema = new Schema({
-  id: { type: Number, index: true },
+  id: { type: Number, index: true, unique: true },
   name: { type: String },
   picture: { type: String },
 })
@@ -19,7 +19,7 @@ export const Director = mongoose.model<IDirector>('director', DirectorDBSchema)
 
 export const PollDBSchema = new Schema({
   cover: { type: String },
-  id: { type: Number, index: true },
+  id: { type: Number, index: true, unique: true },
   label: { type: String },
   participationCount: { type: Number, index: true },
 })
@@ -30,19 +30,19 @@ export const MovieDBSchema = new Schema(
   {
     id: { type: Number, index: true, unique: true },
     senscritique: {
-      actors: [{ actor: { type: Schema.Types.ObjectId, ref: 'actor', index: true }, role: { type: String } }],
+      actors: [{ actor: { type: Number, ref: 'actor', index: true, unique: true }, role: { type: String } }],
       category: { type: String },
       countries: [{ type: String, index: true }],
       dateRelease: { type: String, index: true },
       dateReleaseOriginal: { type: String },
-      directors: [{ type: Schema.Types.ObjectId, ref: 'director', index: true }],
+      directors: [{ type: Number, ref: 'director', index: true, unique: true }],
       duration: { type: Number, index: true },
       frenchReleaseDate: { type: String },
       genresInfos: [{ type: String, index: true }],
       id: { type: Number },
       originalTitle: { type: String },
       pictures: { backdrops: [{ type: String }], posters: [{ type: String }], screenshots: [{ type: String }] },
-      polls: [{ type: Schema.Types.ObjectId, ref: 'poll', index: true }],
+      polls: [{ type: Number, ref: 'poll', index: true, unique: true }],
       popularity: { type: Number },
       rating: { type: Number, index: true },
       slug: { type: String },
@@ -118,7 +118,26 @@ export const MovieDBSchema = new Schema(
 )
 
 MovieDBSchema.pre(['findOne', 'find'], function (next) {
-  void this.populate('senscritique.actors.actor senscritique.directors senscritique.polls')
+  void this.populate([
+    {
+      path: 'senscritique.actors.actor',
+      model: 'actor',
+      localField: 'senscritique.actors.actor',
+      foreignField: 'id',
+    },
+    {
+      path: 'senscritique.directors',
+      model: 'director',
+      localField: 'senscritique.directors',
+      foreignField: 'id',
+    },
+    {
+      path: 'senscritique.polls',
+      model: 'poll',
+      localField: 'senscritique.polls',
+      foreignField: 'id',
+    },
+  ])
   next()
 })
 
@@ -137,21 +156,13 @@ MovieDBSchema.pre('findOneAndUpdate', async function (next) {
 
     await Promise.all(upserts)
 
-    const actorsIds = actors.map(({ actor }) => actor.id)
+    const actorsIds = actors.map(({ actor, role }) => ({ actor: actor.id, role }))
     const directorsIds = directors.map((director) => director.id)
     const pollsIds = polls?.map((poll) => poll.id) || []
 
-    const ids = [Actor.find(filter(actorsIds)), Director.find(filter(directorsIds)), Poll.find(filter(pollsIds))]
-
-    const [actorsDocs, directorsDocs, pollsDocs] = await Promise.all(ids)
-
-    const actorsOIds = actors.map(({ actor, role }) => ({ actor: mapIds(actorsDocs)[actor.id], role }))
-    const directorsOIds = directors.map((director) => mapIds(directorsDocs)[director.id])
-    const pollsOIds = polls?.map((poll) => mapIds(pollsDocs)[poll.id]) || []
-
     const formattedMovie = {
       ...movie,
-      senscritique: { ...senscritique, actors: actorsOIds, directors: directorsOIds, polls: pollsOIds },
+      senscritique: { ...senscritique, actors: actorsIds, directors: directorsIds, polls: pollsIds },
     }
 
     this.setUpdate(formattedMovie)
@@ -171,16 +182,6 @@ const formatUpsert = (value: Record<string, string | number | null>) => {
       upsert: true,
     },
   }
-}
-
-const filter = (ids: number[]) => {
-  return { id: { $in: ids } }
-}
-
-const mapIds = (values: Document[]) => {
-  const result: Record<string, unknown> = {}
-  values.forEach((value) => (result[`${value.id}`] = value._id))
-  return result
 }
 
 export const Movie = mongoose.model<IMovie>('moviesV2', MovieDBSchema)

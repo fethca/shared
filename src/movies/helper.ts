@@ -28,6 +28,8 @@ export async function getMax(Model: Model<IMovie>, property: string, filter?: Fi
     .sort({ [property]: -1 })
     .limit(1)
 
+  if (!movie) return 0
+
   const keys = property.split('.')
   const key = keys.pop()
   const path = keys.join()
