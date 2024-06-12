@@ -20,7 +20,7 @@ export const Director = mongoose.model<IDirector>('director', DirectorDBSchema)
 export const PollDBSchema = new Schema({
   cover: { type: String },
   id: { type: Number, index: true, unique: true },
-  label: { type: String },
+  name: { type: String },
   participationCount: { type: Number, index: true },
 })
 
@@ -30,19 +30,19 @@ export const MovieDBSchema = new Schema(
   {
     id: { type: Number, index: true, unique: true },
     senscritique: {
-      actors: [{ actor: { type: Number, ref: 'actor', index: true, unique: true }, role: { type: String } }],
+      actors: [{ actor: { type: Number, ref: 'actor', index: true }, role: { type: String } }],
       category: { type: String },
       countries: [{ type: String, index: true }],
       dateRelease: { type: String, index: true },
       dateReleaseOriginal: { type: String },
-      directors: [{ type: Number, ref: 'director', index: true, unique: true }],
+      directors: [{ type: Number, ref: 'director', index: true }],
       duration: { type: Number, index: true },
       frenchReleaseDate: { type: String },
       genresInfos: [{ type: String, index: true }],
       id: { type: Number },
       originalTitle: { type: String },
       pictures: { backdrops: [{ type: String }], posters: [{ type: String }], screenshots: [{ type: String }] },
-      polls: [{ type: Number, ref: 'poll', index: true, unique: true }],
+      polls: [{ type: Number, ref: 'poll', index: true }],
       popularity: { type: Number },
       rating: { type: Number, index: true },
       slug: { type: String },
