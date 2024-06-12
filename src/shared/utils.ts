@@ -7,3 +7,7 @@ export function rate(set: string[], string?: string | null) {
   const score = Number(fuse.search(string)[0]?.score)
   return score
 }
+
+export function wait(milliseconds: number) {
+  return new Promise((resolve) => setTimeout(() => resolve(true), milliseconds))
+}
