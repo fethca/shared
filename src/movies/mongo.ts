@@ -73,8 +73,8 @@ export const MovieDBSchema = new Schema(
       cleanTitle: { type: String },
       tmdbId: { type: Number },
       imdbId: { type: String },
-      genres: [{ type: String }],
-      images: [{ type: String }],
+      genres: { type: [String], default: undefined },
+      images: { type: [String], default: undefined },
       ratings: {
         imdb: {
           votes: { type: Number, index: true },
