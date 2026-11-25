@@ -28,23 +28,22 @@
   "devDependencies": {
     "@fethcat/eslint-plugin": "^0.0.3",
     "@fethcat/prettier-config": "^1.0.5",
-    "@fethcat/tests": "^0.0.15",
-    "@fethcat/version": "^0.0.12",
+    "@fethcat/tests": "^0.1.0",
+    "@fethcat/version": "^0.1.0",
     "@types/lodash.get": "^4.4.9",
     "@types/luxon": "^3.4.2",
-    "@types/node": "^20.12.12",
-    "prettier": "^3.2.5",
-    "typescript": "^5.4.5",
-    "vitest": "^1.6.0"
+    "@types/node": "^24.19.4",
+    "@vitest/coverage-v8": "^5.1.2",
+    "prettier": "^3.10.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.2"
   },
   "dependencies": {
-    "@fethcat/validator": "^0.0.5",
-    "@vitest/coverage-v8": "^1.6.0",
-    "envalid": "^8.0.0",
     "fuse.js": "^7.0.0",
     "lodash.get": "^4.4.2",
     "luxon": "^3.4.4",
-    "mongoose": "^8.4.0",
+    "mongoose": "^8.24.11",
     "zod": "^3.23.8"
   },
   "prettier": "@fethcat/prettier-config",
@@ -52,5 +51,9 @@
     "extends": [
       "plugin:@fethcat/back"
     ]
-  }
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@9.15.9"
 }
