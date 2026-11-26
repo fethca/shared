@@ -26,7 +26,7 @@
     "url": "git@github.com:fethca/shared.git"
   },
   "devDependencies": {
-    "@fethcat/eslint-plugin": "^0.0.3",
+    "@fethcat/eslint-plugin": "^0.0.4",
     "@fethcat/prettier-config": "^1.0.5",
     "@fethcat/tests": "^0.0.16",
     "@fethcat/version": "^0.0.17",
@@ -34,6 +34,7 @@
     "@types/luxon": "^3.7.6",
     "@types/node": "^24.19.4",
     "@vitest/coverage-v8": "^5.1.2",
+    "eslint": "^10.15.0",
     "prettier": "^3.10.1",
     "typescript": "^5.9.3",
     "vite": "^8.3.8",
@@ -47,11 +48,6 @@
     "zod": "^4.6.7"
   },
   "prettier": "@fethcat/prettier-config",
-  "eslintConfig": {
-    "extends": [
-      "plugin:@fethcat/back"
-    ]
-  },
   "engines": {
     "node": ">=24"
   },
