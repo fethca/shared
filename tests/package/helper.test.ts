@@ -1,5 +1,4 @@
 import { readFileSync } from 'fs'
-import { ZodError } from 'zod'
 import { extractPackageJson } from '../../src/index.helpers.js'
 
 vi.mock('fs')
@@ -29,15 +28,13 @@ describe('extractPackageJson', () => {
 
   it('should throw if a value is missing', () => {
     vi.mocked(readFileSync).mockReturnValue(JSON.stringify({ version: '1.0.0' }))
-    const error = new ZodError([
-      {
-        code: 'invalid_type',
-        expected: 'string',
-        received: 'undefined',
-        path: ['name'],
-        message: 'Required',
-      },
-    ])
-    expect(() => extractPackageJson()).toThrow(error)
+    expect(() => extractPackageJson()).toThrow(
+      expect.objectContaining({
+        name: 'ZodError',
+        issues: [
+          { code: 'invalid_type', expected: 'string', received: 'undefined', path: ['name'], message: 'Required' },
+        ],
+      }),
+    )
   })
 })
