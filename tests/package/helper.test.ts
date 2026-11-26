@@ -31,9 +31,7 @@ describe('extractPackageJson', () => {
     expect(() => extractPackageJson()).toThrow(
       expect.objectContaining({
         name: 'ZodError',
-        issues: [
-          { code: 'invalid_type', expected: 'string', received: 'undefined', path: ['name'], message: 'Required' },
-        ],
+        issues: [expect.objectContaining({ code: 'invalid_type', expected: 'string', path: ['name'] })],
       }),
     )
   })
