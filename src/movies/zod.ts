@@ -171,6 +171,7 @@ export const movieSchema = z.object({
   search: z.string().default(''),
   popularity: z.number().default(0),
   released: z.boolean().default(false),
+  edition: z.boolean().default(false),
   id: z.number(),
   updatedAt: z.date().optional(),
   opsDatas: z
