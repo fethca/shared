@@ -71,7 +71,7 @@ export const MovieDBSchema = new Schema(
       year: { type: Number, index: true },
       studio: { type: String },
       cleanTitle: { type: String },
-      tmdbId: { type: Number },
+      tmdbId: { type: Number, index: true },
       imdbId: { type: String },
       genres: { type: [String], default: undefined },
       images: { type: [String], default: undefined },
@@ -108,6 +108,7 @@ export const MovieDBSchema = new Schema(
     ],
     popularity: { type: Number, index: true },
     released: { type: Boolean, index: true },
+    edition: { type: Boolean, index: true },
     opsDatas: {
       lastJobDate: { type: Number },
       lastUpdateDate: { type: Number },
